@@ -1,0 +1,1 @@
+# azure-bicep-infra-adf-and-sql
