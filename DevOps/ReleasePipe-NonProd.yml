@@ -1,0 +1,139 @@
+trigger:
+  branches:
+    include:
+    #- feature/*
+    #- release/*
+    - main
+  #paths:
+  #  include:
+  #  - azuredatabricks
+    
+pool:
+  vmImage: 'ubuntu-latest'
+
+variables:
+  workingDir: $(Build.Repository.LocalPath)/
+  serviceConnection: 'clintazrealallrgs' 
+  resourceGroupName: 'factorystuff'
+  location: 'uksouth'
+  subscriptionId: 'XXxxxx19ed3'
+
+stages:
+  - stage: build
+    jobs:
+      - job:
+        steps:
+        # building bicep into ARM
+        - task: AzureCLI@2  
+          displayName: 'Build bicep artifact' 
+          inputs: 
+            azureSubscription: $(serviceConnection)
+            scriptType: 'pscore'  
+            scriptLocation: 'inlineScript'  
+            inlineScript: |
+              $file = "$(Build.SourcesDirectory)/maindeploy.bicep"            
+              New-Item -ItemType Directory -Force -Path $(build.artifactstagingdirectory)/infrastructure
+              az bicep build --file $file --outdir $(build.artifactstagingdirectory)/infrastructure
+
+              $file = "$(Build.SourcesDirectory)/resourcegroupcreation.bicep"            
+              az bicep build --file $file --outdir $(build.artifactstagingdirectory)/infrastructure
+
+        - task: PublishPipelineArtifact@1
+          inputs:
+            targetPath: '$(build.artifactstagingdirectory)'
+            artifact: 'bicepresources'
+            publishLocation: 'pipeline'
+  
+  - stage: 'development'
+    displayName: 'Development deploy'
+    dependsOn: build
+    variables:
+      -group: Test-vars
+
+    jobs: 
+      - deployment: DeployToDevelopment
+        environment: dev-data 
+        strategy:
+          runOnce:
+            deploy:
+              steps:
+                - task: DownloadPipelineArtifact@2 #downloading artifacts created in build stage
+                  inputs:
+                    source: 'current'
+                    path: '$(Pipeline.Workspace)'
+                - task: AzureCLI@2
+                  displayName: Bicep deploy Scope of SubscriptionId
+                  inputs:
+                    azureSubscription: $(serviceConnection)
+                    scriptType: bash
+                    scriptLocation: inlineScript
+                    inlineScript: |
+                      az --version
+                      az upgrade
+                      az deployment sub create  \
+                        --name ClintGAzReal \
+                        --location $(location) \
+                        --template-file $(Pipeline.Workspace)/bicepresources/infrastructure/resourcegroupcreation.json \
+                        --parameters environment="dev" azlocation="uksouth" nameofrg="bicep-cga-dev-uks-rg-01"
+              
+                - task: AzureResourceManagerTemplateDeployment@3
+                  displayName: Creating AZ Resource Infrastructure by IaC
+                  inputs:
+                    deploymentScope: 'Resource Group'
+                    azureResourceManagerConnection: '$(serviceConnection)'
+                    subscriptionId: '$(subscriptionId)'
+                    action: 'Create Or Update Resource Group'
+                    resourceGroupName: 'bicep-cga-dev-uks-rg-01'
+                    location: '$(location)'
+                    templateLocation: 'Linked artifact'
+                    csmFile: '$(Pipeline.Workspace)/bicepresources/infrastructure/maindeploy.json'
+                    overrideParameters: -serverPassword $(SqlPassword)
+                    deploymentMode: 'Incremental'
+                    deploymentOutputs: 'ArmOutputs'
+
+  - stage: 'test'
+    displayName: 'Test deploy'
+    dependsOn: development
+    variables:
+      -group: Test-vars
+
+    jobs: 
+      - deployment: DeployToTest
+        environment: test-data 
+        strategy:
+          runOnce:
+            deploy:
+              steps:
+                - task: DownloadPipelineArtifact@2 #downloading artifacts created in build stage
+                  inputs:
+                    source: 'current'
+                    path: '$(Pipeline.Workspace)'
+                - task: AzureCLI@2
+                  displayName: Bicep deploy Scope of SubscriptionId
+                  inputs:
+                    azureSubscription: $(serviceConnection)
+                    scriptType: bash
+                    scriptLocation: inlineScript
+                    inlineScript: |
+                      az --version
+                      az upgrade
+                      az deployment sub create  \
+                        --name ClintGAzReal \
+                        --location $(location) \
+                        --template-file $(Pipeline.Workspace)/bicepresources/infrastructure/resourcegroupcreation.json \
+                        --parameters environment="test" azlocation="uksouth" nameofrg="bicep-cga-test-uks-rg-01"
+              
+                - task: AzureResourceManagerTemplateDeployment@3
+                  displayName: Creating AZ Resource Infrastructure by IaC
+                  inputs:
+                    deploymentScope: 'Resource Group'
+                    azureResourceManagerConnection: '$(serviceConnection)'
+                    subscriptionId: '$(subscriptionId)'
+                    action: 'Create Or Update Resource Group'
+                    resourceGroupName: 'bicep-cga-test-uks-rg-01'
+                    location: '$(location)'
+                    templateLocation: 'Linked artifact'
+                    csmFile: '$(Pipeline.Workspace)/bicepresources/infrastructure/maindeploy.json'
+                    overrideParameters: -serverPassword $(SqlPassword) -deploymentEnvironment test
+                    deploymentMode: 'Incremental'
+                    deploymentOutputs: 'ArmOutputs'
