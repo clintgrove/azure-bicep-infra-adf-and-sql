@@ -16,7 +16,7 @@ variables:
   serviceConnection: 'clintazrealallrgs' 
   resourceGroupName: 'factorystuff'
   location: 'uksouth'
-  subscriptionId: 'XXxxxx19ed3'
+  subscriptionId: '3be2ce56-4a5f-4034-88d7-2953d1819ed3'
 
 stages:
   - stage: build
