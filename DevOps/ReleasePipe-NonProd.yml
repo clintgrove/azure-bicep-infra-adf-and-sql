@@ -87,7 +87,7 @@ stages:
                     location: '$(location)'
                     templateLocation: 'Linked artifact'
                     csmFile: '$(Pipeline.Workspace)/bicepresources/infrastructure/maindeploy.json'
-                    overrideParameters: -serverPassword $(SqlPassword)
+                    overrideParameters: -serverPassword $(SqlPassword) -gitConfigureLater false
                     deploymentMode: 'Incremental'
                     deploymentOutputs: 'ArmOutputs'
 
