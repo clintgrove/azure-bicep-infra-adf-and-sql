@@ -12,7 +12,7 @@ param deploymentEnvironment string = 'dev'
 
 @description('is this in test, dev or prod')
 
-param gitConfigureLater bool = true
+param gitConfigureLater bool = false
 param gitRepoType string = 'FactoryVSTSConfiguration'
 param gitAccountName string = 'clintgrove'
 param gitRepositoryName string = 'azure-bicep-infra-adf-and-sql'
