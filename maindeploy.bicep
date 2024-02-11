@@ -18,7 +18,7 @@ param gitAccountName string = 'clintgrove'
 param gitRepositoryName string = 'azure-bicep-infra-adf-and-sql'
 param gitCollaborationBranch string = 'main'
 param gitRootFolder string = '/DataFactory/adf-git'
-param gitProjectName string = ''
+param gitProjectName string = 'Clint Azure DOps learning'
 
 //Deploy Factory
 module factory 'br/public:avm/res/data-factory/factory:0.1.3' = {
