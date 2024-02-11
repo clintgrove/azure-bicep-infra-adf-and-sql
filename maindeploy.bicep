@@ -18,6 +18,7 @@ param gitAccountName string = 'clintgrove'
 param gitRepositoryName string = 'azure-bicep-infra-adf-and-sql'
 param gitCollaborationBranch string = 'main'
 param gitRootFolder string = '/DataFactory/adf-git'
+param gitProjectName string = ''
 
 //Deploy Factory
 module factory 'br/public:avm/res/data-factory/factory:0.1.3' = {
@@ -31,6 +32,7 @@ module factory 'br/public:avm/res/data-factory/factory:0.1.3' = {
     gitRepositoryName : bool(gitConfigureLater) ? null : gitRepositoryName
     gitCollaborationBranch : bool(gitConfigureLater) ? null : gitCollaborationBranch
     gitRootFolder : bool(gitConfigureLater) ? null : gitRootFolder
+    gitProjectName: bool(gitConfigureLater) ? null : gitProjectName
   }
 }
 
