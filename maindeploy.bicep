@@ -11,12 +11,10 @@ param serverPassword string
 param deploymentEnvironment string = 'dev'
 
 //Deploy Factory
-module m_FactoryDeploy 'modules/data-factory.bicep' = {
-  name: 'FactoryDeploy'
-  dependsOn:[
-    ]
+module factory 'br/public:avm/res/data-factory/factory:0.3.1' = {
+  name: '${uniqueString(deployment().name, resourceLocation)}-adfdeploy-dffmin'
   params: {
-    dataFactoryName : 'adf-bicep-${deploymentEnvironment}-cgr2'
+    name: 'adf-bicep-${deploymentEnvironment}-cgr2'
     location: resourcelocation
   }
 }
