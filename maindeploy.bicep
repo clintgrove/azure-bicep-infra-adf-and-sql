@@ -35,6 +35,21 @@ module factory 'br/public:avm/res/data-factory/factory:0.1.3' = {
     gitProjectName: bool(gitConfigureLater) ? null : gitProjectName
   }
 }
+resource m_DataFactoryPipeline 'Microsoft.DataFactory/factories/pipelines@2018-06-01' = {
+  name: 'factory/WaitPipeline'
+  properties: {
+    activities: [
+      {
+        name: 'WaitActivity'
+        type: 'Wait'
+        typeProperties: {
+          waitTimeInSeconds: 10
+        }
+      }
+    ]
+  }
+}
+
 
 module m_SqlServer 'modules/sql-server-and-db.bicep' = {
   name: 'SqlServer'
