@@ -11,8 +11,8 @@ param serverPassword string
 param deploymentEnvironment string = 'dev'
 
 //Deploy Factory
-module factory 'br/public:avm/res/data-factory/factory:0.3.1' = {
-  name: '${uniqueString(deployment().name, resourceLocation)}-adfdeploy-dffmin'
+module factory 'br/public:avm/res/data-factory/factory:0.1.3' = {
+  name: '${uniqueString(deployment().name, 'uksouth')}-adfdeploy-dffmin'
   params: {
     name: 'adf-bicep-${deploymentEnvironment}-cgr2'
     location: resourcelocation
