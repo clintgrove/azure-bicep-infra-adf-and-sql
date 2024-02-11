@@ -26,11 +26,11 @@ module factory 'br/public:avm/res/data-factory/factory:0.1.3' = {
     name: 'adf-bicep-${deploymentEnvironment}-cgr2'
     location: resourcelocation
     gitConfigureLater : gitConfigureLater
-    gitRepoType : bool(gitConfigureLater) ? gitRepoType : null
-    gitAccountName : bool(gitConfigureLater) ? gitAccountName : null
-    gitRepositoryName : bool(gitConfigureLater) ? gitRepositoryName : null
-    gitCollaborationBranch : bool(gitConfigureLater) ? gitCollaborationBranch : null
-    gitRootFolder : bool(gitConfigureLater) ? gitRootFolder : null
+    gitRepoType : bool(gitConfigureLater) ? null : gitRepoType
+    gitAccountName : bool(gitConfigureLater) ? null : gitAccountName 
+    gitRepositoryName : bool(gitConfigureLater) ? null : gitRepositoryName
+    gitCollaborationBranch : bool(gitConfigureLater) ? null : gitCollaborationBranch
+    gitRootFolder : bool(gitConfigureLater) ? null : gitRootFolder
   }
 }
 
