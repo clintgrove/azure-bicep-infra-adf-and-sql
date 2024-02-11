@@ -13,12 +13,12 @@ param deploymentEnvironment string = 'dev'
 @description('is this in test, dev or prod')
 
 param gitConfigureLater bool = false
-param gitRepoType string = 'FactoryVSTSConfiguration'
+param gitRepoType string = 'GitHub'
 param gitAccountName string = 'clintgrove'
 param gitRepositoryName string = 'azure-bicep-infra-adf-and-sql'
 param gitCollaborationBranch string = 'main'
-param gitRootFolder string = ''
-param gitProjectName string = 'Clint Azure DOps learning'
+param gitRootFolder string = '/adf-dev'
+param gitProjectName string = ''
 
 //Deploy Factory
 module factory 'br/public:avm/res/data-factory/factory:0.1.3' = {
