@@ -210,7 +210,7 @@ stages:
       pool:
         vmImage: 'windows-latest'
       displayName: Deploy data factory
-      dependsOn: JobDataFactoryBuild
+      dependsOn: []
       variables:
         - group: Dev-vars
       environment: dev-data
