@@ -138,7 +138,7 @@ stages:
                     deploymentMode: 'Incremental'
                     deploymentOutputs: 'ArmOutputs'
 
-  - stage: 'build-adf-services'
+  - stage: 'build_adf_services'
     jobs:  
     - deployment: JobDataBuild
       pool:
