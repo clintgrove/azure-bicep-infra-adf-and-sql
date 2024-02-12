@@ -139,6 +139,7 @@ stages:
                     deploymentOutputs: 'ArmOutputs'
 
   - stage: 'build_adf_services'
+    displayName: Build ADF artifact
     jobs:  
     - deployment: JobDataFactoryBuild
       pool:
@@ -204,7 +205,8 @@ stages:
                   artifact: 'ADFArmTemplatesData01'
                   publishLocation: 'pipeline'
 
-  - stage: 
+  - stage: 'deploy_adf_services'
+    displayName: Deploy ADF artifact
     jobs:  
     - deployment: JobDataFactoryDeploy
       pool:
