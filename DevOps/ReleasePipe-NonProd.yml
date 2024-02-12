@@ -244,7 +244,7 @@ stages:
                     subscriptionId: ${{ variables.subscriptionId }} 
                     action: 'Create Or Update Resource Group'
                     resourceGroupName: ${{ variables.resourceGroup }}
-                    location: ${{ parameters.Location }}
+                    location: ${{ variables.location }}
                     templateLocation: 'Linked artifact'
                     csmFile: '$(Pipeline.Workspace)/ADFArmTemplatesData01/ARMTemplateForFactory.json' # From downloaded artifact
                     #csmParametersFile: '$(Pipeline.Workspace)/ADFArmTemplateParametersData01/ARMTemplateParametersForFactory01${{parameters.Environment}}.json' # From downloaded artifact
