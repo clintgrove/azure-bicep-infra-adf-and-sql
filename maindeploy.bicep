@@ -36,7 +36,7 @@ module factory 'br/public:avm/res/data-factory/factory:0.1.3' = {
   }
 }
 resource m_DataFactoryPipeline 'Microsoft.DataFactory/factories/pipelines@2018-06-01' = {
-  name: 'factory/WaitPipeline'
+  name: 'adf-bicep-${deploymentEnvironment}-cgr2/WaitPipeline'
   properties: {
     activities: [
       {
