@@ -1,6 +1,6 @@
 {
 	"whichEnv": {
 		"type": "string",
-		"value": "dev"
+		"value": "development"
 	}
 }

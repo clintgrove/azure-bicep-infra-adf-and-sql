@@ -6,7 +6,7 @@
 			"value": "adf-bicep-dev-cgr2"
 		},
 		"default_properties_whichEnv_value": {
-			"value": "dev"
+			"value": "development"
 		}
 	}
 }

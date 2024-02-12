@@ -9,7 +9,7 @@
 		},
 		"default_properties_whichEnv_value": {
 			"type": "string",
-			"defaultValue": "dev"
+			"defaultValue": "development"
 		},
 		"containerUri": {
 			"type": "string",
