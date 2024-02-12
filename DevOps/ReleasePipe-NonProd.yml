@@ -181,7 +181,7 @@ stages:
               inputs:
                 command: 'custom'
                 workingDir: '$(Build.Repository.LocalPath)/' #replace with the package.json folder
-                customCommand: 'run build validate $(Build.Repository.LocalPath)/adf-dev'
+                customCommand: 'run build validate $(Build.Repository.LocalPath)/adf-dev /subscriptions/3be2ce56-4a5f-4034-88d7-2953d1819ed3/resourceGroups/bicep-cga-dev-uks-rg-01/providers/Microsoft.DataFactory/factories/adf-bicep-dev-cgr2'
               displayName: 'Validate'
 
             # Validate and then generate the ARM template into the destination folder, which is the same as selecting "Publish" from the UX.
