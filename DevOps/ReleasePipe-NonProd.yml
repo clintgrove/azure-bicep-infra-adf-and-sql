@@ -158,6 +158,15 @@ stages:
                 versionSpec: '14.x'
               displayName: 'Install Node.js'
             
+            - task: PowerShell@2
+              displayName: 'List Files'
+              inputs:
+                targetType: 'inline'
+                script: |
+                  Get-ChildItem -Path $(Build.Repository.LocalPath) -Recurse | ForEach-Object {
+                    Write-Host $_.FullName
+                  }
+
             - task: Npm@1
               inputs:
                 command: 'install'
