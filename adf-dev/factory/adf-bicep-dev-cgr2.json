@@ -5,6 +5,10 @@
 			"whichEnv": {
 				"type": "string",
 				"value": "development"
+			},
+			"s2ndgb": {
+				"type": "string",
+				"value": "whateves"
 			}
 		}
 	},
