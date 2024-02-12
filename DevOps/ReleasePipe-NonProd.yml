@@ -137,3 +137,163 @@ stages:
                     overrideParameters: -serverPassword $(SqlPassword) -deploymentEnvironment test -gitConfigureLater true
                     deploymentMode: 'Incremental'
                     deploymentOutputs: 'ArmOutputs'
+
+  - stage: 'deploy adf services'
+    jobs:  
+
+      steps:
+      - task: NodeTool@0
+        inputs:
+          versionSpec: '14.x'
+        displayName: 'Install Node.js'
+      
+      - task: Npm@1
+        inputs:
+          command: 'install'
+          workingDir: '$(Build.Repository.LocalPath)/' 
+          verbose: true
+        displayName: 'Install npm package'
+      
+      # Validates all of the Data Factory resources in the repository. You'll get the same validation errors as when "Validate All" is selected.
+      # Enter the appropriate subscription and name for the source factory. Either of the "Validate" or "Validate and Generate ARM temmplate" options are required to perform validation. Running both is unnecessary.
+      - task: Npm@1
+        inputs:
+          command: 'custom'
+          workingDir: '$(Build.Repository.LocalPath)/' #replace with the package.json folder
+          customCommand: 'run build validate $(Build.Repository.LocalPath)/DataFactory/adf-gittestcgro-uksouth-dev-01 ${{ parameters.DataFactoryResourceId }}'
+        displayName: 'Validate'
+
+      # Validate and then generate the ARM template into the destination folder, which is the same as selecting "Publish" from the UX.
+      # The ARM template generated isn't published to the live version of the factory. Deployment should be done by using a CI/CD pipeline. 
+
+      - task: Npm@1
+        inputs:
+          command: 'custom'
+          workingDir: '$(Build.Repository.LocalPath)/' #replace with the package.json folder
+          customCommand: 'run build export ${{ parameters.ArmTemplateExportPath }}  ${{ parameters.DataFactoryResourceId }} "ADFnpmGeneratedArmTemplate"'
+      #For using preview that allows you to only stop/ start triggers that are modified, please comment out the above line and uncomment the below line. Make sure the package.json contains the build-preview command. 
+      #customCommand: 'run build-preview export $(Build.Repository.LocalPath) /subscriptions/222f1459-6ebd-4896-82ab-652d5f6883cf/resourceGroups/GartnerMQ2021/providers/Microsoft.DataFactory/factories/Dev-GartnerMQ2021-DataFactory "ArmTemplate"'
+        displayName: 'Validate and Generate ARM template'
+
+
+      # Publish the Artifact to be used as a source for a release pipeline
+      - task: PublishPipelineArtifact@1
+        inputs:
+            targetPath: '$(Build.Repository.LocalPath)/ADFnpmGeneratedArmTemplate'
+            artifact: '${{ parameters.ArmTemplatesADFArtifact }}'
+            publishLocation: 'pipeline'
+
+      - task: PublishPipelineArtifact@1
+        inputs:
+            targetPath: '$(Build.Repository.LocalPath)/Infrastructure/Services/${{ parameters.ZoneType }}'
+            artifact: '${{ parameters.ArmTemplateParametersADFArtifact }}'
+            publishLocation: 'pipeline'
+
+
+      - deployment: JobDataServices
+        displayName: Job - Data Services
+        pool:
+        vmImage: 'windows-2019'
+        dependsOn: DeployToDevelopment
+        # variables:
+        #   - template: ..\Variables\Variables-Global.yml
+        #   - template: ..\Variables\Variables-${{ Parameters.Environment }}.yml
+        #   - group: ${{ Parameters.Environment }}-vars
+        environment: dev-data
+        strategy:
+          runOnce:
+            preDeploy:
+              steps:
+              - ${{ if eq(parameters.FeatureFlag_ADF_DeployPipelines, true) }}:
+                - download: current
+                  artifact: 'AdfArmTemplatesData01' #  ADF01 arm templates
+              - ${{ if eq(parameters.FeatureFlag_SQL_Deploy, true) }}:
+                - download: current
+                  artifact: 'dropDacpacFACTARGET' #  facTarget dacpac
+                - download: current
+                  artifact: 'dropDacpacFACSOURCE' #  facSource dacpac
+              - download: current
+                artifact: 'ArmTemplates' 
+
+              
+            deploy:
+              steps:
+
+              - task: AzurePowerShell@5
+                displayName: Get output from ARM template
+                name: SetSqlVarFQDNp2
+                inputs:
+                  script: FilePath
+                  azureSubscription: '$(ServiceConnection)'
+                  ScriptPath: '$(Pipeline.Workspace)/Scripts/getDeploymentOutputs.ps1'
+                  ScriptArguments: '-resourceGroupName ${{variables.ResourceGroupNameGHUB}}'
+                  azurePowerShellVersion: LatestVersion
+                  
+              - script: echo sqlSrvNameOutput is  with alias  $(SetSqlVarFQDNp2.sqlSrvNameOutput)
+              - script: echo ADF Name is $(SetSqlVarFQDNp2.adfNameOutput)
+              
+              # Deploy Databases
+              - ${{ if eq(parameters.FeatureFlag_SQL_Deploy, true) }}:
+
+                #dfac source database
+                - template: ../Tasks/Task-DeployAzureSqlDb.yml
+                  parameters:
+                    DacpacFilePath: '$(Pipeline.Workspace)/dropDacpacFACSOURCE/dafacstuffuks-source.dacpac'
+                    DatabaseName: ${{ variables.DatabaseName_facstuff_source }}
+                    AdditionalArguments: /p:BlockOnPossibleDataLoss=${{ lower(parameters.FeatureFlag_SQL_StopIfDataLossCanOccur) }}
+                    ServerName: $(SetSqlVarFQDNp2.sqlSrvNameOutput) # ${{ variables.AzureSqlServerName_ghub }}
+                    ServiceConnection: ${{ parameters.ServiceConnection }}
+                    RGroup: ${{ parameters.RGroup }}
+                    sqlServerPasswordDA: $(SqlGetThrough)
+                    AADSecurityGroup: ${{ variables.AADSecurityGroup }}
+                    DataFactoryNameGHUB: $(SetSqlVarFQDNp2.adfNameOutput)
+                
+                #dfac target database
+                - template: ../Tasks/Task-DeployAzureSqlDb.yml
+                  parameters:
+                    DacpacFilePath: '$(Pipeline.Workspace)/dropDacpacFACTARGET/dafacstuffuks-target.dacpac'
+                    DatabaseName: ${{ variables.DatabaseName_facstuff_target }}
+                    AdditionalArguments: /p:BlockOnPossibleDataLoss=${{ lower(parameters.FeatureFlag_SQL_StopIfDataLossCanOccur) }}
+                    ServerName: $(SetSqlVarFQDNp2.sqlSrvNameOutput) #${{ variables.AzureSqlServerName_ghub }}
+                    ServiceConnection: ${{ parameters.ServiceConnection }}
+                    RGroup: ${{ parameters.RGroup }}
+                    sqlServerPasswordDA: $(SqlGetThrough)
+                    AADSecurityGroup: ${{ variables.AADSecurityGroup }}
+                    DataFactoryNameGHUB: $(SetSqlVarFQDNp2.adfNameOutput)
+          
+
+              # Stop ADF 01 triggers
+              - ${{ if eq(parameters.FeatureFlag_ADF_DeployPipelines, true) }}:
+                - template: ../Tasks/Utils/Util-StopDataFactoryTriggers.yml
+                  parameters:
+                    ServiceConnection: ${{ parameters.ServiceConnection }}
+                    ResourceGroup: ${{ variables.ResourceGroupNameGHUB }}
+                    SubscriptionId: ${{ variables.SubscriptionIdGHUB }}
+                    DataFactoryName: ${{ variables.DataFactoryNameGHUB }}
+
+              #Deploy Data Factory 01 pipelines
+                - task: AzureResourceManagerTemplateDeployment@3
+                  #condition: and(succeed(), eq('${{parameters.doSql}}', 'true')) #this is for the datafactory deployment
+                  displayName: "Deploy data factory inner stuff"
+                  inputs:
+                    deploymentScope: 'Resource Group'
+                    azureResourceManagerConnection: ${{ parameters.ServiceConnection }}
+                    subscriptionId: ${{ variables.SubscriptionIdGHUB }} 
+                    action: 'Create Or Update Resource Group'
+                    resourceGroupName: ${{ variables.ResourceGroupNameGHUB }}
+                    location: ${{ parameters.Location }}
+                    templateLocation: 'Linked artifact'
+                    csmFile: '$(Pipeline.Workspace)/ADFArmTemplatesData01/ARMTemplateForFactory.json' # From downloaded artifact
+                    csmParametersFile: '$(Pipeline.Workspace)/ADFArmTemplateParametersData01/ARMTemplateParametersForFactory01${{parameters.Environment}}.json' # From downloaded artifact
+                    deploymentMode: 'Incremental'
+                    overrideParameters: '-factoryName $(SetSqlVarFQDNp2.adfNameOutput) -facstuff_DatabaseSOURCE_connectionString "Integrated Security=False;Encrypt=True;Connection Timeout=30;Data Source=$(SetSqlVarFQDNp2.sqlSrvNameOutput);Initial Catalog=dba-fac-stf-source;Server=tcp:$(SetSqlVarFQDNp2.sqlSrvNameOutput),1433;TrustServerCertificate=False" -facstuff_DatabaseTARGET_connectionString "Integrated Security=False;Encrypt=True;Connection Timeout=30;Data Source=$(SetSqlVarFQDNp2.sqlSrvNameOutput);Initial Catalog=dba-facstuff-target;Server=tcp:$(SetSqlVarFQDNp2.sqlSrvNameOutput),1433;TrustServerCertificate=False"'
+                    outputs: adfNameOutput
+
+                  #Start ADF 01 triggers
+                - template: ../Tasks/Utils/Util-StartDataFactoryTriggers.yml
+                  parameters:
+                    ServiceConnection: ${{ parameters.ServiceConnection }}
+                    ResourceGroup: ${{ variables.ResourceGroupNameGHUB }}
+                    SubscriptionId: ${{ variables.SubscriptionIdGHUB }}
+                    DataFactoryName: ${{ variables.DataFactoryNameGHUB }}
+
