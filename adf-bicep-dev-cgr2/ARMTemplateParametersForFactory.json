@@ -7,6 +7,9 @@
 		},
 		"default_properties_whichEnv_value": {
 			"value": "development"
+		},
+		"default_properties_s2ndgb_value": {
+			"value": "whateves"
 		}
 	}
 }

@@ -11,6 +11,10 @@
 			"type": "string",
 			"defaultValue": "development"
 		},
+		"default_properties_s2ndgb_value": {
+			"type": "string",
+			"defaultValue": "whateves"
+		},
 		"containerUri": {
 			"type": "string",
 			"metadata": "URI to storage account containing linked ARM templates"
@@ -40,6 +44,9 @@
 					},
 					"default_properties_whichEnv_value": {
 						"value": "[parameters('default_properties_whichEnv_value')]"
+					},
+					"default_properties_s2ndgb_value": {
+						"value": "[parameters('default_properties_s2ndgb_value')]"
 					}
 				}
 			},

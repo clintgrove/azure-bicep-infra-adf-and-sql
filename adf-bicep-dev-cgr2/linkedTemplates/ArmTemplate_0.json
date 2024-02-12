@@ -10,6 +10,10 @@
 		"default_properties_whichEnv_value": {
 			"type": "string",
 			"defaultValue": "development"
+		},
+		"default_properties_s2ndgb_value": {
+			"type": "string",
+			"defaultValue": "whateves"
 		}
 	},
 	"variables": {
@@ -24,6 +28,10 @@
 				"whichEnv": {
 					"type": "string",
 					"value": "[parameters('default_properties_whichEnv_value')]"
+				},
+				"s2ndgb": {
+					"type": "string",
+					"value": "[parameters('default_properties_s2ndgb_value')]"
 				}
 			},
 			"dependsOn": []
