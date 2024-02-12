@@ -14,7 +14,7 @@ pool:
 variables:
   workingDir: $(Build.Repository.LocalPath)/
   serviceConnection: 'clintazrealallrgs' 
-  resourceGroupName: 'factorystuff'
+  resourceGroupName: 'bicep-cga-dev-uks-rg-01'
   location: 'uksouth'
   subscriptionId: '3be2ce56-4a5f-4034-88d7-2953d1819ed3'
 
@@ -140,7 +140,7 @@ stages:
 
   - stage: 'build_adf_services'
     jobs:  
-    - deployment: JobDataBuild
+    - deployment: JobDataFactoryBuild
       pool:
         vmImage: 'windows-latest'
       displayName: Job - Data Build
@@ -210,7 +210,7 @@ stages:
       pool:
         vmImage: 'windows-latest'
       displayName: Deploy data factory
-      dependsOn: JobDataBuild
+      dependsOn: JobDataFactoryBuild
       variables:
         - group: Dev-vars
       environment: dev-data
@@ -224,7 +224,6 @@ stages:
            steps:
 
               # Deploy Databases
-              - ${{ if eq(parameters.FeatureFlag_SQL_Deploy, true) }}:
 
               # Stop ADF 01 triggers
               # - ${{ if eq(parameters.FeatureFlag_ADF_DeployPipelines, true) }}:
@@ -241,10 +240,10 @@ stages:
                   displayName: "Deploy data factory inner stuff"
                   inputs:
                     deploymentScope: 'Resource Group'
-                    azureResourceManagerConnection: ${{ parameters.ServiceConnection }}
-                    subscriptionId: ${{ variables.SubscriptionIdGHUB }} 
+                    azureResourceManagerConnection: ${{ variables.serviceConnection }}
+                    subscriptionId: ${{ variables.subscriptionId }} 
                     action: 'Create Or Update Resource Group'
-                    resourceGroupName: ${{ variables.ResourceGroupNameGHUB }}
+                    resourceGroupName: ${{ variables.resourceGroup }}
                     location: ${{ parameters.Location }}
                     templateLocation: 'Linked artifact'
                     csmFile: '$(Pipeline.Workspace)/ADFArmTemplatesData01/ARMTemplateForFactory.json' # From downloaded artifact
