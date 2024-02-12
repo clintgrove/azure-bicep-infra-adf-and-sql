@@ -143,7 +143,7 @@ stages:
     - deployment: JobDataFactoryBuild
       pool:
         vmImage: 'windows-latest'
-      displayName: Job - Data Build
+      displayName: Build data factory
       dependsOn: []
       variables:
         - group: Dev-vars
@@ -243,7 +243,7 @@ stages:
                     azureResourceManagerConnection: ${{ variables.serviceConnection }}
                     subscriptionId: ${{ variables.subscriptionId }} 
                     action: 'Create Or Update Resource Group'
-                    resourceGroupName: ${{ variables.resourceGroup }}
+                    resourceGroupName: ${{ variables.resourceGroupName }}
                     location: ${{ variables.location }}
                     templateLocation: 'Linked artifact'
                     csmFile: '$(Pipeline.Workspace)/ADFArmTemplatesData01/ARMTemplateForFactory.json' # From downloaded artifact
