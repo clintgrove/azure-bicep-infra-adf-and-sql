@@ -1,16 +1,4 @@
 {
 	"name": "adf-bicep-dev-cgr2",
-	"properties": {
-		"globalParameters": {
-			"whichEnv": {
-				"type": "string",
-				"value": "development"
-			},
-			"s2ndgb": {
-				"type": "string",
-				"value": "whateves"
-			}
-		}
-	},
 	"location": "uksouth"
 }
