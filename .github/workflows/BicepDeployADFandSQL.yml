@@ -62,8 +62,8 @@ jobs:
         run: |
           az deployment sub create \
             --name ClintGAzReal \
-            --location ${{ env.location }} \
-            --template-file ${{ github.workspace }}/bicepresources/infrastructure/resourcegroupcreation.json \
+            --location uksouth \
+            --template-file ./resourcegroupcreation.bicep \
             --parameters environment="dev" azlocation="uksouth" nameofrg="bicep-cga-dev-uks-rg-01"
 
       - name: Creating AZ Resource Infrastructure by IaC
