@@ -63,7 +63,7 @@ jobs:
           az deployment sub create \
             --name ClintGAzReal \
             --location uksouth \
-            --template-file {{ github.workspace }}/resourcegroupcreation.json \
+            --template-file ${{ github.workspace }}/resourcegroupcreation.bicep \
             --parameters environment="dev" azlocation="uksouth" nameofrg="bicep-cga-dev-uks-rg-01"
 
       - name: Creating AZ Resource Infrastructure by IaC
