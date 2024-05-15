@@ -33,6 +33,12 @@ module factory 'br/public:avm/res/data-factory/factory:0.1.3' = {
     gitCollaborationBranch : bool(gitConfigureLater) ? null : gitCollaborationBranch
     gitRootFolder : bool(gitConfigureLater) ? null : gitRootFolder
     gitProjectName: bool(gitConfigureLater) ? null : gitProjectName
+    globalParameters: {
+      whichEnv: {
+        type: 'String'
+        value: 'dev'
+      }
+    }
   }
 }
 resource m_DataFactoryPipeline 'Microsoft.DataFactory/factories/pipelines@2018-06-01' = {
