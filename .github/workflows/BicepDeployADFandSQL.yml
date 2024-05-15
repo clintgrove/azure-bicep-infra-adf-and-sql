@@ -7,7 +7,7 @@ on:
   workflow_dispatch:
 
 env:
-  workingDir: ${{ github.workspace }}
+  workingDir: bcpwork
   serviceConnection: 'clintazrealallrgs' 
   devResourceGroupName: 'bicep-cga-dev-uks-rg-01'
   testResourceGroupName: 'bicep-cga-test-uks-rg-01'
