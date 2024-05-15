@@ -56,14 +56,14 @@ jobs:
       - name: Download bicep artifact
         uses: actions/download-artifact@v2
         with:
-          name: bicepresources
+          name: downloadedbicepresources
 
       - name: Bicep deploy Scope of SubscriptionId
         run: |
           az deployment sub create \
             --name ClintGAzReal \
             --location uksouth \
-            --template-file ${{ github.workspace }}/bicepresources/resourcegroupcreation.json \
+            --template-file ${{ env.workingDir }}/downloadedbicepresources/resourcegroupcreation.json \
             --parameters environment="dev" azlocation="uksouth" nameofrg="bicep-cga-dev-uks-rg-01"
 
       - name: Creating AZ Resource Infrastructure by IaC
