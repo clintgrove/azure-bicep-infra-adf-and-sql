@@ -1,0 +1,146 @@
+name: Azure Bicep Infra ADF and SQL
+
+on:
+  push:
+    branches:
+      - main
+
+env:
+  workingDir: ${{ github.workspace }}
+  serviceConnection: 'clintazrealallrgs' 
+  devResourceGroupName: 'bicep-cga-dev-uks-rg-01'
+  testResourceGroupName: 'bicep-cga-test-uks-rg-01'
+  location: 'uksouth'
+  subscriptionId: '3be2ce56-4a5f-4034-88d7-2953d1819ed3'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Build bicep artifact
+        run: |
+          mkdir -p ${{ env.workingDir }}/infrastructure
+          file="${{ github.workspace }}/maindeploy.bicep"
+          az bicep build --file $file --outdir ${{ env.workingDir }}/infrastructure
+
+          file="${{ github.workspace }}/resourcegroupcreation.bicep"
+          az bicep build --file $file --outdir ${{ env.workingDir }}/infrastructure
+
+      - name: Publish bicep artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: bicepresources
+          path: ${{ env.workingDir }}/infrastructure
+
+  development:
+    runs-on: ubuntu-latest
+    needs: build
+
+    environment:
+      name: dev-data
+
+    steps:
+      - name: Download bicep artifact
+        uses: actions/download-artifact@v2
+        with:
+          name: bicepresources
+
+      - name: Bicep deploy Scope of SubscriptionId
+        run: |
+          az --version
+          az upgrade
+          az deployment sub create \
+            --name ClintGAzReal \
+            --location ${{ env.location }} \
+            --template-file ${{ github.workspace }}/bicepresources/infrastructure/resourcegroupcreation.json \
+            --parameters environment="dev" azlocation="uksouth" nameofrg="bicep-cga-dev-uks-rg-01"
+
+      - name: Creating AZ Resource Infrastructure by IaC
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+      # Add the remaining steps for Azure Resource Manager template deployment
+
+  test:
+    needs: development
+    runs-on: ubuntu-latest
+    environment:
+      name: test-data
+
+    steps:
+      - name: Download bicep artifact
+        uses: actions/download-artifact@v2
+        with:
+          name: bicepresources
+
+      - name: Bicep deploy Scope of SubscriptionId
+        run: |
+          az --version
+          az upgrade
+          az deployment sub create \
+            --name ClintGAzReal \
+            --location ${{ env.location }} \
+            --template-file ${{ github.workspace }}/bicepresources/infrastructure/resourcegroupcreation.json \
+            --parameters environment="test" azlocation="uksouth" nameofrg="bicep-cga-test-uks-rg-01"
+
+      - name: Creating AZ Resource Infrastructure by IaC
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+      # Add the remaining steps for Azure Resource Manager template deployment
+
+  build_adf_services:
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Install Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '14.x'
+
+      - name: List Files
+        run: |
+          Get-ChildItem -Path ${{ github.workspace }} -Recurse | ForEach-Object {
+            Write-Host $_.FullName
+          }
+
+      - name: Install npm package
+        run: npm install
+        working-directory: ${{ github.workspace }}
+
+      # Add the remaining steps for ADF artifact build
+
+  deploy_adf_services:
+    runs-on: ubuntu-latest
+    environment: dev-data
+    steps:
+      - name: Download artifact
+        uses: actions/download-artifact@v2
+        with:
+          name: AdfArmTemplatesData01
+      
+      - name: Deploy DEV data factory inner stuff
+        uses: azure/CLI@v1
+        with:
+          inlineScript: |
+            az deployment group create \
+              --resource-group ${{ secrets.DEV_RESOURCE_GROUP_NAME }} \
+              --template-file ${{ github.workspace }}/ADFArmTemplatesData01/ARMTemplateForFactory.json \
+              --mode Incremental
+      
+      - name: Deploy TEST data factory inner stuff
+        uses: azure/CLI@v1
+        with:
+          inlineScript: |
+            az deployment group create \
+              --resource-group ${{ secrets.TEST_RESOURCE_GROUP_NAME }} \
+              --template-file ${{ github.workspace }}/ADFArmTemplatesData01/ARMTemplateForFactory.json \
+              --mode Incremental \
+              --parameters factoryName=adf-bicep-test-cgr2 default_properties_whichEnv_value=test
