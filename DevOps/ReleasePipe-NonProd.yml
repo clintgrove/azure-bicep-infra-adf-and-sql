@@ -261,7 +261,7 @@ stages:
                     csmFile: '$(Pipeline.Workspace)/ADFArmTemplatesData01/ARMTemplateForFactory.json' # From downloaded artifact
                     #csmParametersFile: '$(Pipeline.Workspace)/ADFArmTemplateParametersData01/ARMTemplateParametersForFactory01${{parameters.Environment}}.json' # From downloaded artifact
                     deploymentMode: 'Incremental'
-                    overrideParameters: '-default_properties_whichEnv_value test'
+                    overrideParameters: '-factoryName adf-bicep-test-cgr2 -default_properties_whichEnv_value test'
                     #outputs: adfNameOutput
 
 
