@@ -20,7 +20,7 @@ variables:
   subscriptionId: '3be2ce56-4a5f-4034-88d7-2953d1819ed3'
 
 stages:
-  - stage: build
+  - stage: publish-bicep-to-agent
     jobs:
       - job:
         steps:
@@ -46,10 +46,10 @@ stages:
             publishLocation: 'pipeline'
   
   - stage: 'development'
-    displayName: 'Development deploy'
-    dependsOn: build
+    displayName: 'Development infra deploy'
+    dependsOn:  publish-bicep-to-agent
     variables:
-      -group: Test-vars
+      -group: Dev-vars
 
     jobs: 
       - deployment: DeployToDevelopment
@@ -93,7 +93,7 @@ stages:
                     deploymentOutputs: 'ArmOutputs'
 
   - stage: 'test'
-    displayName: 'Test deploy'
+    displayName: 'Test infra deploy'
     dependsOn: development
     variables:
       -group: Test-vars
