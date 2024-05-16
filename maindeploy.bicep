@@ -38,6 +38,10 @@ module factory 'br/public:avm/res/data-factory/factory:0.1.3' = {
         type: 'String'
         value: 'dev'
       }
+      infraGParam: {
+        type: 'String'
+        value: ''
+      }
     }
   }
 }
