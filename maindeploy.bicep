@@ -23,7 +23,7 @@ param gitProjectName string = ''
 // Deploy Factory (note that if you deploy this data factory infrastructure with global parameters and you don't have the same global parameters in your /adf-dev git folder (see the folder structure)
 // then when you do a build, which builds from the dev factory, then the global parameter, in this case infraGParam will disappear as it doesn't exist in your dev factory git folder /adf-dev )
 // the best way to develop global parameters, managed private endpoints, datasets, linked services etc is to develop them in the factory and when you click save it will go go /adf-dev in the git repo
-module factory 'br/public:avm/res/data-factory/factory:0.1.3' = {
+module factory 'br/public:avm/res/data-factory/factory:0.3.2' = {
   name: '${uniqueString(deployment().name, 'uksouth')}-adfdeploy-dffmin'
   params: {
     name: 'adf-bicep-${deploymentEnvironment}-cgr2'
