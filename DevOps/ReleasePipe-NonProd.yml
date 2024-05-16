@@ -20,7 +20,7 @@ variables:
   subscriptionId: '3be2ce56-4a5f-4034-88d7-2953d1819ed3'
 
 stages:
-  - stage: publish-bicep-to-agent
+  - stage: publish_bicep_to_agent
     jobs:
       - job:
         steps:
@@ -47,7 +47,7 @@ stages:
   
   - stage: 'development'
     displayName: 'Development infra deploy'
-    dependsOn:  publish-bicep-to-agent
+    dependsOn:  publish_bicep_to_agent
     variables:
       -group: Dev-vars
 
