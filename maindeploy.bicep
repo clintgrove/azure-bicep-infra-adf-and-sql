@@ -20,7 +20,9 @@ param gitCollaborationBranch string = 'main'
 param gitRootFolder string = '/adf-dev'
 param gitProjectName string = ''
 
-//Deploy Factory
+// Deploy Factory (note that if you deploy this data factory infrastructure with global parameters and you don't have the same global parameters in your /adf-dev git folder (see the folder structure)
+// then when you do a build, which builds from the dev factory, then the global parameter, in this case infraGParam will disappear as it doesn't exist in your dev factory git folder /adf-dev )
+// the best way to develop global parameters, managed private endpoints, datasets, linked services etc is to develop them in the factory and when you click save it will go go /adf-dev in the git repo
 module factory 'br/public:avm/res/data-factory/factory:0.1.3' = {
   name: '${uniqueString(deployment().name, 'uksouth')}-adfdeploy-dffmin'
   params: {
@@ -43,10 +45,14 @@ module factory 'br/public:avm/res/data-factory/factory:0.1.3' = {
         value: 'infravaluehere'
       }
     }
+    managedIdentities: {
+      systemAssigned: true
+    }
+    managedVirtualNetworkName: 'default'
   }
 }
 
-// The below is an example of building a pipeline in infra code instead of building a pipeline in the git repo (which will be attached to the factory using lines 29 - 31)
+// The below is an example of building a pipeline in infra code instead of building a pipeline in the git repo (which will be attached to the factory using lines 29 - 35)
 resource m_DataFactoryPipeline 'Microsoft.DataFactory/factories/pipelines@2018-06-01' = {
   name: 'adf-bicep-${deploymentEnvironment}-cgr2/WaitPipeline'
   properties: {
