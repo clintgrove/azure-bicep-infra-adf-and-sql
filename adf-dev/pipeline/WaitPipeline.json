@@ -1,19 +1,19 @@
 {
-	"name": "SecondPipe",
+	"name": "WaitPipeline",
 	"properties": {
 		"activities": [
 			{
-				"name": "Wait1",
+				"name": "WaitActivity",
 				"type": "Wait",
 				"dependsOn": [],
 				"userProperties": [],
 				"typeProperties": {
-					"waitTimeInSeconds": 1
+					"waitTimeInSeconds": 10
 				}
 			}
 		],
 		"annotations": [],
-		"lastPublishTime": "2024-05-16T11:49:19Z"
+		"lastPublishTime": "2024-05-16T11:38:28Z"
 	},
 	"type": "Microsoft.DataFactory/factories/pipelines"
 }
