@@ -55,6 +55,7 @@ module factory 'br/public:avm/res/data-factory/factory:0.3.2' = {
 // The below is an example of building a pipeline in infra code instead of building a pipeline in the git repo (which will be attached to the factory using lines 29 - 35)
 resource m_DataFactoryPipeline 'Microsoft.DataFactory/factories/pipelines@2018-06-01' = {
   name: 'adf-bicep-${deploymentEnvironment}-cgr2/WaitPipeline'
+  dependsOn: [factory]
   properties: {
     activities: [
       {
