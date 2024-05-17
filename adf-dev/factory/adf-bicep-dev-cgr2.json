@@ -4,9 +4,14 @@
 		"globalParameters": {
 			"whichEnv": {
 				"type": "string",
-				"value": "development"
+				"value": "dev"
 			}
 		}
 	},
-	"location": "uksouth"
+	"location": "uksouth",
+	"identity": {
+		"type": "SystemAssigned",
+		"principalId": "ac4f90a6-1847-47eb-9b17-34e49d6b02ab",
+		"tenantId": "16b3c013-d300-468d-ac64-7eda0820b6d3"
+	}
 }
