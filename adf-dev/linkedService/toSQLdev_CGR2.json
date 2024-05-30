@@ -1,0 +1,15 @@
+{
+	"name": "toSQLdev_CGR2",
+	"properties": {
+		"annotations": [],
+		"type": "AzureSqlDatabase",
+		"typeProperties": {
+			"server": "sql-bicep-dev-cgr2.database.windows.net",
+			"database": "db-dev-bccga-1",
+			"encrypt": "mandatory",
+			"trustServerCertificate": false,
+			"hostNameInCertificate": "",
+			"authenticationType": "SystemAssignedManagedIdentity"
+		}
+	}
+}
