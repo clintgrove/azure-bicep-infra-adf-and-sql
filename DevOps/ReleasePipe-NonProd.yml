@@ -13,7 +13,7 @@ pool:
 
 variables:
   workingDir: $(Build.Repository.LocalPath)/
-  serviceConnection: 'clintazrealallrgs' 
+  serviceConnection: 'clintazreal2' 
   devResourceGroupName: 'bicep-cga-dev-uks-rg-01'
   testResourceGroupName: 'bicep-cga-test-uks-rg-01'
   location: 'uksouth'
