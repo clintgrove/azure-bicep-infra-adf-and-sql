@@ -1,5 +1,5 @@
 {
-	"name": "toSQLdev_CGR2",
+	"name": "ls_azsql_db1",
 	"properties": {
 		"annotations": [],
 		"type": "AzureSqlDatabase",
