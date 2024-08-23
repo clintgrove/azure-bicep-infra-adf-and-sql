@@ -72,7 +72,6 @@ stages:
                       az --version
                       az upgrade
                       az deployment sub create  \
-
                         --name ClintGAzReal \
                         --location $(location) \
                         --template-file $(Pipeline.Workspace)/bicepresources/infrastructure/resourcegroupcreation.json \
