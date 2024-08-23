@@ -1,0 +1,21 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "ls_azsql_db1_properties_typeProperties_server": {
+                    "value": "sql-bicep-test-cgr2.database.windows.net"
+    },
+        "ls_azsql_db1_properties_typeProperties_database": {
+                    "value": "db-test-bccga-1"
+    },
+        "pec-sql-db1_properties_privateLinkResourceId": {
+                    "value": "/subscriptions/3be2ce56-4a5f-4034-88d7-2953d1819ed3/resourceGroups/bicep-cga-test-uks-rg-01/providers/Microsoft.Sql/servers/sql-bicep-test-cgr2"
+    },
+        "pec-sql-db1_properties_groupId": {
+                    "value": "sqlServer"
+    },
+        "default_properties_whichEnv_value": {
+                    "value": "test"
+    }
+ }
+}
