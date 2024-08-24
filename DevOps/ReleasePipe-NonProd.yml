@@ -247,7 +247,7 @@ stages:
                     location: ${{ variables.location }}
                     templateLocation: 'Linked artifact'
                     csmFile: '$(Pipeline.Workspace)/ADFArmTemplatesData01/ARMTemplateForFactory.json' # From downloaded artifact
-                    csmParametersFile: '$(Agent.BuildDirectory)/dev-Parameters.json' # From downloaded artifact
+                    csmParametersFile: '$(System.DefaultWorkingDirectory)/dev-Parameters.json' # From downloaded artifact
                     deploymentMode: 'Incremental'
                     overrideParameters: '-default_properties_whichEnv_value dev'
                     #overrideParameters: '-factoryName $(SetSqlVarFQDNp2.adfNameOutput) -facstuff_DatabaseSOURCE_connectionString "Integrated Security=False;Encrypt=True;Connection Timeout=30;Data Source=$(SetSqlVarFQDNp2.sqlSrvNameOutput);Initial Catalog=dba-fac-stf-source;Server=tcp:$(SetSqlVarFQDNp2.sqlSrvNameOutput),1433;TrustServerCertificate=False" -facstuff_DatabaseTARGET_connectionString "Integrated Security=False;Encrypt=True;Connection Timeout=30;Data Source=$(SetSqlVarFQDNp2.sqlSrvNameOutput);Initial Catalog=dba-facstuff-target;Server=tcp:$(SetSqlVarFQDNp2.sqlSrvNameOutput),1433;TrustServerCertificate=False"'
