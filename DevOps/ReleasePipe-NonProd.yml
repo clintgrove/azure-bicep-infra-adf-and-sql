@@ -1,9 +1,9 @@
-trigger:
-  branches:
-    include:
+trigger: none
+  # branches:
+  #   include:
     #- feature/*
     #- release/*
-    - main
+    # - main
   #paths:
   #  include:
   #  - azuredatabricks
