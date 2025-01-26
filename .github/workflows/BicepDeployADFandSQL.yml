@@ -143,6 +143,7 @@ jobs:
             az deployment group create \
               --resource-group ${{ secrets.DEV_RESOURCE_GROUP_NAME }} \
               --template-file ${{ github.workspace }}/ADFArmTemplatesData01/ARMTemplateForFactory.json \
+              --parameters @${{ github.workspace }}/ArmParameters/dev-Parameters.json \
               --mode Incremental
       
       - name: Deploy TEST data factory inner stuff
@@ -152,5 +153,6 @@ jobs:
             az deployment group create \
               --resource-group ${{ secrets.TEST_RESOURCE_GROUP_NAME }} \
               --template-file ${{ github.workspace }}/ADFArmTemplatesData01/ARMTemplateForFactory.json \
+              --parameters @${{ github.workspace }}/ArmParameters/dev-Parameters.json \
               --mode Incremental \
               --parameters factoryName=adf-bicep-test-cgr2 default_properties_whichEnv_value=test
