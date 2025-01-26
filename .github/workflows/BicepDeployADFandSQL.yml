@@ -6,6 +6,10 @@ on:
       - main
   workflow_dispatch:
 
+permissions:
+  id-token: write
+  contents: read
+
 env:
   workingDir: bcpwork
   devResourceGroupName: 'bicep-cga-dev-uks-rg-01'
