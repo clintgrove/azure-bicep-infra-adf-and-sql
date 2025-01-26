@@ -37,7 +37,7 @@ jobs:
           auth-type: SERVICE_PRINCIPAL
 
       - name: Set Azure subscription context
-        run: az account set --subscription ${{ secrets.AZURE_SUBSCRIPTION }}
+        run: az account set --subscription ${{ secrets.AZURE_SUBSCRIPTION_ID }}
 
       - name: Build bicep artifact
         run: |
