@@ -23,7 +23,7 @@ jobs:
         uses: actions/checkout@main
 
       - name: Set up Azure credentials
-        uses: azure/login@v1
+        uses: Azure/login@v2.2.0
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
 
@@ -40,7 +40,7 @@ jobs:
           az bicep build --file $file --outdir ${{ env.workingDir }}/infrastructure
 
       - name: Publish bicep artifact
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: bicepresources
           path: ${{ env.workingDir }}/infrastructure
@@ -54,7 +54,7 @@ jobs:
 
     steps:
       - name: Download bicep artifact
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v3
         with:
           name: bicepresources
 
@@ -80,7 +80,7 @@ jobs:
 
     steps:
       - name: Download bicep artifact
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v3
         with:
           name: bicepresources
 
@@ -132,7 +132,7 @@ jobs:
 
     steps:
       - name: Download artifact
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v3
         with:
           name: AdfArmTemplatesData01
       
