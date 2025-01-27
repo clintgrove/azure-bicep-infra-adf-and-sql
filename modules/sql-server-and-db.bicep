@@ -23,14 +23,10 @@ resource sqlserver_rc 'Microsoft.Sql/servers@2022-05-01-preview' = {
   properties: {
     administratorLogin: 'sqladmin'
     administratorLoginPassword: sqlserverpassword
-    // administrators: {
-    //   administratorType: 'ActiveDirectory'
-    //   azureADOnlyAuthentication: false
-    //   login: '@microsoft.com'
-    //   principalType: 'User'
-    //   sid: ''
-    //   tenantId: ''
-    // }
+    administrators: {
+      administratorType: 'ActiveDirectory'
+      azureADOnlyAuthentication: false
+    }
     // federatedClientId: 'string'
     // keyId: 'string'
     // minimalTlsVersion: 'string'
