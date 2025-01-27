@@ -7,13 +7,25 @@
 			"metadata": "Data Factory name",
 			"defaultValue": "adf-bicep-dev-cgr2"
 		},
+		"ls_azsql_db1_properties_typeProperties_server": {
+			"type": "string",
+			"defaultValue": "sql-bicep-dev-cgr2.database.windows.net"
+		},
+		"ls_azsql_db1_properties_typeProperties_database": {
+			"type": "string",
+			"defaultValue": "db-dev-bccga-1"
+		},
+		"pec-sql-db1_properties_privateLinkResourceId": {
+			"type": "string",
+			"defaultValue": "/subscriptions/3be2ce56-4a5f-4034-88d7-2953d1819ed3/resourceGroups/bicep-cga-dev-uks-rg-01/providers/Microsoft.Sql/servers/sql-bicep-dev-cgr2"
+		},
+		"pec-sql-db1_properties_groupId": {
+			"type": "string",
+			"defaultValue": "sqlServer"
+		},
 		"default_properties_whichEnv_value": {
 			"type": "string",
-			"defaultValue": "development"
-		},
-		"default_properties_s2ndgb_value": {
-			"type": "string",
-			"defaultValue": "whateves"
+			"defaultValue": "dev"
 		},
 		"containerUri": {
 			"type": "string",
@@ -31,7 +43,7 @@
 		{
 			"name": "adf-bicep-dev-cgr2_ArmTemplate_0",
 			"type": "Microsoft.Resources/deployments",
-			"apiVersion": "2018-02-01",
+			"apiVersion": "2024-03-01",
 			"properties": {
 				"mode": "incremental",
 				"templateLink": {
@@ -45,8 +57,17 @@
 					"default_properties_whichEnv_value": {
 						"value": "[parameters('default_properties_whichEnv_value')]"
 					},
-					"default_properties_s2ndgb_value": {
-						"value": "[parameters('default_properties_s2ndgb_value')]"
+					"pec-sql-db1_properties_privateLinkResourceId": {
+						"value": "[parameters('pec-sql-db1_properties_privateLinkResourceId')]"
+					},
+					"pec-sql-db1_properties_groupId": {
+						"value": "[parameters('pec-sql-db1_properties_groupId')]"
+					},
+					"ls_azsql_db1_properties_typeProperties_server": {
+						"value": "[parameters('ls_azsql_db1_properties_typeProperties_server')]"
+					},
+					"ls_azsql_db1_properties_typeProperties_database": {
+						"value": "[parameters('ls_azsql_db1_properties_typeProperties_database')]"
 					}
 				}
 			},
