@@ -35,16 +35,6 @@ module factory 'br/public:avm/res/data-factory/factory:0.3.2' = {
     gitCollaborationBranch : bool(gitConfigureLater) ? null : gitCollaborationBranch
     gitRootFolder : bool(gitConfigureLater) ? null : gitRootFolder
     gitProjectName: bool(gitConfigureLater) ? null : gitProjectName
-    globalParameters: {
-      whichEnv: {
-        type: 'String'
-        value: deploymentEnvironment
-      }
-      infraGParam: {
-        type: 'String'
-        value: 'infravaluehere'
-      }
-    }
     managedIdentities: {
       systemAssigned: true
     }
