@@ -56,7 +56,9 @@ stages:
     displayName: 'Development infra deploy'
     dependsOn:  publish_bicep_to_agent
     variables:
-      -group: Dev-vars
+      - group: Dev-vars
+      - name: tenantID
+        value: $(tenantID)
 
     jobs: 
       - deployment: DeployToDevelopment
@@ -69,21 +71,26 @@ stages:
                   inputs:
                     source: 'current'
                     path: '$(Pipeline.Workspace)'
+                
                 - script: echo This is the tenant id $(tenantID)
-                - task: AzureCLI@2
-                  displayName: Bicep deploy Scope of SubscriptionId
-                  inputs:
-                    azureSubscription: $(serviceConnection)
-                    scriptType: bash
-                    scriptLocation: inlineScript
-                    inlineScript: |
-                      az --version
-                      az upgrade
-                      az deployment sub create  \
-                        --name ClintGAzReal \
-                        --location $(location) \
-                        --template-file $(Pipeline.Workspace)/bicepresources/infrastructure/resourcegroupcreation.json \
-                        --parameters environment="dev" azlocation="uksouth" nameofrg="bicep-cga-dev-uks-rg-01"
+
+                - script: |
+                    echo Override Parameters: -p_tenantId $(tenantID)
+
+                # - task: AzureCLI@2
+                #   displayName: Bicep deploy Scope of SubscriptionId
+                #   inputs:
+                #     azureSubscription: $(serviceConnection)
+                #     scriptType: bash
+                #     scriptLocation: inlineScript
+                #     inlineScript: |
+                #       az --version
+                #       az upgrade
+                #       az deployment sub create  \
+                #         --name ClintGAzReal \
+                #         --location $(location) \
+                #         --template-file $(Pipeline.Workspace)/bicepresources/infrastructure/resourcegroupcreation.json \
+                #         --parameters environment="dev" azlocation="uksouth" nameofrg="bicep-cga-dev-uks-rg-01"
               
                 - task: AzureResourceManagerTemplateDeployment@3
                   displayName: Creating AZ Resource Infrastructure by IaC
