@@ -7,7 +7,6 @@ param location string = resourceGroup().location
 param sqlserverpassword string
 param env string
 param pin_aadUsername string
-param pin_aadUserObjectId string
 param pin_TenantId string
 
 resource sqlserver_rc 'Microsoft.Sql/servers@2022-05-01-preview' = {

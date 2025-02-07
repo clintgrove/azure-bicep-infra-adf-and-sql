@@ -81,7 +81,6 @@ module m_SqlServer 'modules/sql-server-and-db.bicep' = {
     location: resourcelocation
     SQLServerName: 'sql-bicep-${deploymentEnvironment}-cgr2'
     pin_aadUsername: p_aadUsername
-    pin_aadUserObjectId: p_aadUserObjectId
     pin_TenantId: p_tenantId
   }
 }
