@@ -69,7 +69,7 @@ resource m_DataFactoryPipeline 'Microsoft.DataFactory/factories/pipelines@2018-0
   }
 }
 
-resource kv 'Microsoft.KeyVault/vaults@2019-09-01' existing = {
+resource kv 'Microsoft.KeyVault/vaults@2023-07-01' existing = {
   name: 'keyvault-forgeneraluse'
   scope: resourceGroup('3be2ce56-4a5f-4034-88d7-2953d1819ed3', 'commonResources' )
 }
