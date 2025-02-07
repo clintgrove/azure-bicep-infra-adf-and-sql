@@ -70,16 +70,6 @@ stages:
                     source: 'current'
                     path: '$(Pipeline.Workspace)'
                 
-                - script: echo This is the tenant id $(tenantIDss)
-                - task: Bash@3
-                  displayName: 'Verify DevOps Variables'
-                  inputs:
-                    targetType: 'inline'
-                    script: |
-                      echo "Checking Variables..."
-                      echo "Tenant ID: ${tenant-id-secret}"
-                      echo "AAD Username: ${aadUsername}"
-                      echo "AAD User Object ID: ${aadUserObjectId}"
                 # - task: AzureCLI@2
                 #   displayName: Bicep deploy Scope of SubscriptionId
                 #   inputs:
