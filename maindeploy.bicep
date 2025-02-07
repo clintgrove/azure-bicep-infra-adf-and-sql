@@ -81,7 +81,7 @@ module m_SqlServer 'modules/sql-server-and-db.bicep' = {
     env: deploymentEnvironment
     location: resourcelocation
     SQLServerName: 'sql-bicep-${deploymentEnvironment}-cgr2'
-    pin_aadUsername: kv.getSecret('sqladminusername')
+    pin_aadUsername: kv.getSecret('aadUsername')
     pin_TenantId: kv.getSecret('tenant-id-secret')
   }
 }
