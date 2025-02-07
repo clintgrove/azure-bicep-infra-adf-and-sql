@@ -69,6 +69,7 @@ stages:
                   inputs:
                     source: 'current'
                     path: '$(Pipeline.Workspace)'
+                - script: echo This is the tenant id $(tenantID)
                 - task: AzureCLI@2
                   displayName: Bicep deploy Scope of SubscriptionId
                   inputs:
