@@ -95,7 +95,7 @@ stages:
                     location: '$(location)'
                     templateLocation: 'Linked artifact'
                     csmFile: '$(Pipeline.Workspace)/bicepresources/infrastructure/maindeploy.json'
-                    overrideParameters: -serverPassword $(SqlPassword) -deploymentEnvironment dev -gitConfigureLater false
+                    overrideParameters: -serverPassword $(SqlPassword) -deploymentEnvironment dev -gitConfigureLater false -p_aadUsername $(aadUsername) -p_aadUserObjectId $(aadUserObjectId) -p_tenantId $(tenantID) 
                     deploymentMode: 'Incremental'
                     deploymentOutputs: 'ArmOutputs'
 
@@ -142,7 +142,7 @@ stages:
                     location: '$(location)'
                     templateLocation: 'Linked artifact'
                     csmFile: '$(Pipeline.Workspace)/bicepresources/infrastructure/maindeploy.json'
-                    overrideParameters: -serverPassword $(SqlPassword) -deploymentEnvironment test -gitConfigureLater true
+                    overrideParameters: -serverPassword $(SqlPassword) -deploymentEnvironment test -gitConfigureLater true -p_aadUsername $(aadUsername) -p_aadUserObjectId $(aadUserObjectId) -p_tenantId $(tenant-id-secret) 
                     deploymentMode: 'Incremental'
                     deploymentOutputs: 'ArmOutputs'
 

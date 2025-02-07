@@ -1,14 +1,14 @@
 @description('Data Factory Name')
 param SQLServerName string = 'sql-bicep-test-cgr1'//'adf-bicep1-${uniqueString(resourceGroup().id)}'
-
 @description('Location of the data factory.')
 param location string = resourceGroup().location
-
 @description('sql server password secure')
 @secure()
 param sqlserverpassword string
-
 param env string
+param pin_aadUsername string
+param pin_aadUserObjectId string
+param pin_TenantId string
 
 resource sqlserver_rc 'Microsoft.Sql/servers@2022-05-01-preview' = {
   name: SQLServerName
@@ -26,6 +26,9 @@ resource sqlserver_rc 'Microsoft.Sql/servers@2022-05-01-preview' = {
     administrators: {
       administratorType: 'ActiveDirectory'
       azureADOnlyAuthentication: false
+      login: pin_aadUsername
+      sid: pin_aadUserObjectId
+      tenantId: pin_TenantId
     }
     // federatedClientId: 'string'
     // keyId: 'string'

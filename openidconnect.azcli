@@ -1,0 +1,5 @@
+# $appid = '0cd5c4c8-050b-4851-9352-6a4ab25aa897'
+# $tenantid = '316c2bbe-c4fa-41da-96d8-33d84a140dd1'
+# $subscriptionid = '6d0a0c1f-6739-473b-962f-01f793ed5368'
+
+az ad app federated-credential create --id 0cd5c4c8-050b-4851-9352-6a4ab25aa897 --parameters "C:\Users\clintgrove\GitHubRepos\azure-bicep-infra-adf-and-sql\credentials.json"
