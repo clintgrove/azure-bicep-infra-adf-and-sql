@@ -56,7 +56,7 @@ stages:
     displayName: 'Development infra deploy'
     dependsOn:  publish_bicep_to_agent
     variables:
-      - group: Dev-vars
+      - group: Test-vars
 
     jobs: 
       - deployment: DeployToDevelopment
@@ -77,7 +77,7 @@ stages:
                     targetType: 'inline'
                     script: |
                       echo "Checking Variables..."
-                      echo "Tenant ID: ${tenantID}"
+                      echo "Tenant ID: ${tenant-id-secret}"
                       echo "AAD Username: ${aadUsername}"
                       echo "AAD User Object ID: ${aadUserObjectId}"
                 # - task: AzureCLI@2
