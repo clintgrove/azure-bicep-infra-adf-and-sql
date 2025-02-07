@@ -27,6 +27,7 @@ resource sqlserver_rc 'Microsoft.Sql/servers@2022-05-01-preview' = {
       administratorType: 'ActiveDirectory'
       azureADOnlyAuthentication: false
       login: pin_aadUsername
+      principalType: 'User'
       sid: pin_aadUserObjectId
       tenantId: pin_TenantId
     }
