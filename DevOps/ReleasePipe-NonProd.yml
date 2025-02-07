@@ -72,10 +72,7 @@ stages:
                     source: 'current'
                     path: '$(Pipeline.Workspace)'
                 
-                - script: echo This is the tenant id $(tenantID)
-
-                - script: |
-                    echo Override Parameters: -p_tenantId $(tenantID)
+                - script: echo This is the tenant id $(tenantIDss)
 
                 # - task: AzureCLI@2
                 #   displayName: Bicep deploy Scope of SubscriptionId
