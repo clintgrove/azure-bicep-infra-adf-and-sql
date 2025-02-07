@@ -3,10 +3,6 @@
 @description('ADX Database Name')
 param resourcelocation string = resourceGroup().location
 
-@description('password for server')
-@secure()
-param serverPassword string
-
 @description('Which deployment environment DEV, TEST PROD etc')
 param deploymentEnvironment string = 'dev'
 
@@ -71,13 +67,13 @@ resource m_DataFactoryPipeline 'Microsoft.DataFactory/factories/pipelines@2018-0
 
 resource kv 'Microsoft.KeyVault/vaults@2023-07-01' existing = {
   name: 'keyvault-forgeneraluse'
-  scope: resourceGroup('3be2ce56-4a5f-4034-88d7-2953d1819ed3', 'commonResources' )
+  scope: resourceGroup('commonResources')
 }
 
 module m_SqlServer 'modules/sql-server-and-db.bicep' = {
   name: 'SqlServer'
   params: {
-    sqlserverpassword: serverPassword
+    sqlserverpassword: kv.getSecret('SqlPassword')
     env: deploymentEnvironment
     location: resourcelocation
     SQLServerName: 'sql-bicep-${deploymentEnvironment}-cgr2'
@@ -85,6 +81,7 @@ module m_SqlServer 'modules/sql-server-and-db.bicep' = {
     pin_TenantId: kv.getSecret('tenant-id-secret')
   }
 }
+
 
 module m_StorageAccounts 'modules/storageaccount.bicep' = {
   name: 'StorageAccounts'

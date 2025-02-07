@@ -2,6 +2,7 @@
 param SQLServerName string = 'sql-bicep-test-cgr1'//'adf-bicep1-${uniqueString(resourceGroup().id)}'
 @description('Location of the data factory.')
 param location string = resourceGroup().location
+
 @description('sql server password secure')
 @secure()
 param sqlserverpassword string
