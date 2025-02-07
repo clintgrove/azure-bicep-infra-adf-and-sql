@@ -56,7 +56,7 @@ stages:
     displayName: 'Development infra deploy'
     dependsOn:  publish_bicep_to_agent
     variables:
-      - group: Test-vars
+      - group: Dev-vars
 
     jobs: 
       - deployment: DeployToDevelopment
@@ -106,7 +106,7 @@ stages:
                     location: '$(location)'
                     templateLocation: 'Linked artifact'
                     csmFile: '$(Pipeline.Workspace)/bicepresources/infrastructure/maindeploy.json'
-                    overrideParameters: -serverPassword $(SqlPassword) -deploymentEnvironment dev -gitConfigureLater false -p_aadUsername $(aadUsername) -p_aadUserObjectId $(aadUserObjectId) -p_tenantId $(tenantID) 
+                    overrideParameters: -serverPassword $(SqlPassword) -deploymentEnvironment dev -gitConfigureLater false 
                     deploymentMode: 'Incremental'
                     deploymentOutputs: 'ArmOutputs'
 
