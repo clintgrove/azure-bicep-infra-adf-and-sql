@@ -17,6 +17,9 @@ param gitRootFolder string = '/adf-dev'
 param gitProjectName string = ''
 @secure()
 param serverPassword string
+param aadUsername string
+param tenantId string
+param aadUserObjectId string
 
 // Deploy Factory (note that if you deploy this data factory infrastructure with global parameters and you don't have the same global parameters in your /adf-dev git folder (see the folder structure)
 // then when you do a build, which builds from the dev factory, then the global parameter, in this case infraGParam will disappear as it doesn't exist in your dev factory git folder /adf-dev )
@@ -79,9 +82,9 @@ module m_SqlServer 'modules/sql-server-and-db.bicep' = {
     env: deploymentEnvironment
     location: resourcelocation
     SQLServerName: 'sql-bicep-${deploymentEnvironment}-cgr2'
-    pin_aadUsername: 'clintgrove@microsoft.com' //kv.getSecret('aadUsername')
-    pin_aadUserObjectId: '4fe7fc36-b425-420f-a3f4-5e14e084eb5e' //kv.getSecret('aadUserObjectId')
-    pin_TenantId: '16b3c013-d300-468d-ac64-7eda0820b6d3' //kv.getSecret('tenant-id-secret')
+    pin_aadUsername: aadUsername //'clintgrove@microsoft.com' //kv.getSecret('aadUsername')
+    pin_aadUserObjectId: aadUserObjectId //'4fe7fc36-b425-420f-a3f4-5e14e084eb5e' //kv.getSecret('aadUserObjectId')
+    pin_TenantId: tenantId //'16b3c013-d300-468d-ac64-7eda0820b6d3' //kv.getSecret('tenant-id-secret')
   }
 }
 
