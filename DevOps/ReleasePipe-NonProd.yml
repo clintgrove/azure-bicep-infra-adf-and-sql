@@ -85,10 +85,7 @@ stages:
                         --template-file $(Pipeline.Workspace)/bicepresources/infrastructure/resourcegroupcreation.json \
                         --parameters environment="dev" azlocation="uksouth" nameofrg="bicep-cga-dev-uks-rg-01"
               
-                - script: echo $(aadUsername)
-                  displayName: 'Get aadUserName' 
-                - script: echo $(tenant-id-secret)
-                  displayName: 'Get tenant'  
+
                 - task: AzureCLI@2
                   displayName: Bicep deploy Scope of Resource Group
                   inputs:
