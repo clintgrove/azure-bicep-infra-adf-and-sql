@@ -92,20 +92,20 @@ stages:
                 - task: AzureCLI@2
                   displayName: Bicep deploy Scope of Resource Group
                   inputs:
-                  azureSubscription: $(serviceConnection)
-                  scriptType: bash
-                  scriptLocation: inlineScript
-                  inlineScript: |
-                    az deployment group create \
-                    --name ClintGAzReal \
-                    --resource-group bicep-cga-dev-uks-rg-01 \
-                    --template-file $(Pipeline.Workspace)/bicepresources/infrastructure/maindeploy.json \
-                    --parameters serverPassword=$(SqlPassword) \
-                           deploymentEnvironment=dev \
-                           gitConfigureLater=false \
-                           aadUsername=$(aadUsername) \
-                           tenantId=$(tenant-id-secret) \
-                           aadUserObjectId=$(aadUserObjectId)
+                    azureSubscription: $(serviceConnection)
+                    scriptType: bash
+                    scriptLocation: inlineScript
+                    inlineScript: |
+                      az deployment group create \
+                      --name ClintGAzReal \
+                      --resource-group bicep-cga-dev-uks-rg-01 \
+                      --template-file $(Pipeline.Workspace)/bicepresources/infrastructure/maindeploy.json \
+                      --parameters serverPassword=$(SqlPassword) \
+                            deploymentEnvironment=dev \
+                            gitConfigureLater=false \
+                            aadUsername=$(aadUsername) \
+                            tenantId=$(tenant-id-secret) \
+                            aadUserObjectId=$(aadUserObjectId)
 
   - stage: 'test'
     displayName: 'Test infra deploy'
