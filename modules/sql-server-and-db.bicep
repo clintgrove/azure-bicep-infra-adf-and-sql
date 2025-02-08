@@ -7,7 +7,9 @@ param location string = resourceGroup().location
 @secure()
 param sqlserverpassword string
 param env string
+@secure()
 param pin_aadUsername string
+@secure()
 param pin_aadUserObjectId string
 
 resource sqlserver_rc 'Microsoft.Sql/servers@2022-05-01-preview' = {

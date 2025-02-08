@@ -98,7 +98,7 @@ stages:
                       --resource-group bicep-cga-dev-uks-rg-01 \
                       --template-file $(Pipeline.Workspace)/bicepresources/infrastructure/maindeploy.json \
                       --parameters serverPassword=$(SqlPassword) \
-                            deploymentEnvironment=dev \
+                            deploymentEnvironment=test \
                             gitConfigureLater=false \
                             aadUsername=$(aadUsername) \
                             aadUserObjectId=$(aadUserObjectId)
