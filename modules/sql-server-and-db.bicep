@@ -31,9 +31,9 @@ resource sqlserver_rc 'Microsoft.Sql/servers@2022-05-01-preview' = {
     administrators: {
       administratorType: 'ActiveDirectory'
       azureADOnlyAuthentication: false
-      login: pin_aadUsername
+      login: 'clintgrove@microsoft.com' //pin_aadUsername
       principalType: 'User'
-      tenantId: pin_TenantId
+      tenantId: '16b3c013-d300-468d-ac64-7eda0820b6d3' // pin_TenantId
     }
     // federatedClientId: 'string'
     // keyId: 'string'
