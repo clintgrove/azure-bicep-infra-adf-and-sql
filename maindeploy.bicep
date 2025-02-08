@@ -15,6 +15,7 @@ param gitRepositoryName string = 'azure-bicep-infra-adf-and-sql'
 param gitCollaborationBranch string = 'main'
 param gitRootFolder string = '/adf-dev'
 param gitProjectName string = ''
+param serverPassword string
 
 // Deploy Factory (note that if you deploy this data factory infrastructure with global parameters and you don't have the same global parameters in your /adf-dev git folder (see the folder structure)
 // then when you do a build, which builds from the dev factory, then the global parameter, in this case infraGParam will disappear as it doesn't exist in your dev factory git folder /adf-dev )
@@ -73,12 +74,12 @@ resource kv 'Microsoft.KeyVault/vaults@2023-07-01' existing = {
 module m_SqlServer 'modules/sql-server-and-db.bicep' = {
   name: 'SqlServer'
   params: {
-    sqlserverpassword: kv.getSecret('SqlPassword')
+    sqlserverpassword: serverPassword //kv.getSecret('SqlPassword')
     env: deploymentEnvironment
     location: resourcelocation
     SQLServerName: 'sql-bicep-${deploymentEnvironment}-cgr2'
-    pin_aadUsername: kv.getSecret('aadUsername')
-    pin_TenantId: kv.getSecret('tenant-id-secret')
+    pin_aadUsername: 'clintgrove@microsoft.com' //kv.getSecret('aadUsername')
+    pin_TenantId: '16b3c013-d300-468d-ac64-7eda0820b6d3' //kv.getSecret('tenant-id-secret')
   }
 }
 
