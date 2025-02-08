@@ -84,7 +84,6 @@ module m_SqlServer 'modules/sql-server-and-db.bicep' = {
     SQLServerName: 'sql-bicep-${deploymentEnvironment}-cgr2'
     pin_aadUsername: aadUsername //'clintgrove@microsoft.com' //kv.getSecret('aadUsername')
     pin_aadUserObjectId: aadUserObjectId //'4fe7fc36-b425-420f-a3f4-5e14e084eb5e' //kv.getSecret('aadUserObjectId')
-    pin_TenantId: tenantId //'16b3c013-d300-468d-ac64-7eda0820b6d3' //kv.getSecret('tenant-id-secret')
   }
 }
 

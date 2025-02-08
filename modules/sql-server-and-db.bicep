@@ -7,14 +7,7 @@ param location string = resourceGroup().location
 @secure()
 param sqlserverpassword string
 param env string
-
 param pin_aadUsername string
-
-@description('AAD Tenant ID')
-@minLength(36)
-@maxLength(36)
-param pin_TenantId string
-
 param pin_aadUserObjectId string
 
 resource sqlserver_rc 'Microsoft.Sql/servers@2022-05-01-preview' = {
@@ -36,7 +29,7 @@ resource sqlserver_rc 'Microsoft.Sql/servers@2022-05-01-preview' = {
       login: pin_aadUsername
       sid: pin_aadUserObjectId
       principalType: 'User'
-      tenantId: pin_TenantId
+      tenantId: subscription().tenantId
     }
     // federatedClientId: 'string'
     // keyId: 'string'

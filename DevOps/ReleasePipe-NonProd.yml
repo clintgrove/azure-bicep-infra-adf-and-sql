@@ -104,7 +104,6 @@ stages:
                             deploymentEnvironment=dev \
                             gitConfigureLater=false \
                             aadUsername=$(aadUsername) \
-                            tenantId=$(tenant-id-secret) \
                             aadUserObjectId=$(aadUserObjectId)
 
   - stage: 'test'
