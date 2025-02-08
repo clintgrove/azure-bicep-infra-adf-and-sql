@@ -7,13 +7,15 @@ param location string = resourceGroup().location
 @secure()
 param sqlserverpassword string
 param env string
-@secure()
+
 param pin_aadUsername string
+
 @description('AAD Tenant ID')
 @minLength(36)
 @maxLength(36)
-@secure()
 param pin_TenantId string
+
+param pin_aadUserObjectId string
 
 resource sqlserver_rc 'Microsoft.Sql/servers@2022-05-01-preview' = {
   name: SQLServerName
@@ -32,6 +34,7 @@ resource sqlserver_rc 'Microsoft.Sql/servers@2022-05-01-preview' = {
       administratorType: 'ActiveDirectory'
       azureADOnlyAuthentication: false
       login: pin_aadUsername
+      sid: pin_aadUserObjectId
       principalType: 'User'
       tenantId: pin_TenantId
     }
