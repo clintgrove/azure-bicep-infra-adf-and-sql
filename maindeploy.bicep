@@ -71,20 +71,15 @@ resource m_DataFactoryPipeline 'Microsoft.DataFactory/factories/pipelines@2018-0
   }
 }
 
-resource kv 'Microsoft.KeyVault/vaults@2023-07-01' existing = {
-  name: 'keyvault-forgeneraluse'
-  scope: resourceGroup('commonResources')
-}
-
 module m_SqlServer 'modules/sql-server-and-db.bicep' = {
   name: 'SqlServer'
   params: {
-    sqlserverpassword: serverPassword //kv.getSecret('SqlPassword')
+    sqlserverpassword: serverPassword 
     env: deploymentEnvironment
     location: resourcelocation
     SQLServerName: 'sql-bicep-${deploymentEnvironment}-cgr2'
-    pin_aadUsername: aadUsername //'clintgrove@microsoft.com' //kv.getSecret('aadUsername')
-    pin_aadUserObjectId: aadUserObjectId //'4fe7fc36-b425-420f-a3f4-5e14e084eb5e' //kv.getSecret('aadUserObjectId')
+    pin_aadUsername: aadUsername
+    pin_aadUserObjectId: aadUserObjectId
   }
 }
 
