@@ -89,26 +89,23 @@ stages:
                   displayName: 'Get aadUserName' 
                 - script: echo $(tenant-id-secret)
                   displayName: 'Get tenant'  
-                - task: AzureResourceManagerTemplateDeployment@3
-                  displayName: Creating AZ Resource Infrastructure by IaC
+                - task: AzureCLI@2
+                  displayName: Bicep deploy Scope of Resource Group
                   inputs:
-                    deploymentScope: 'Resource Group'
-                    azureResourceManagerConnection: '$(serviceConnection)'
-                    subscriptionId: '$(subscriptionId)'
-                    action: 'Create Or Update Resource Group'
-                    resourceGroupName: 'bicep-cga-dev-uks-rg-01'
-                    location: '$(location)'
-                    templateLocation: 'Linked artifact'
-                    csmFile: '$(Pipeline.Workspace)/bicepresources/infrastructure/maindeploy.json'
-                    overrideParameters: |
-                      -serverPassword $(SqlPassword)
-                      -deploymentEnvironment dev
-                      -gitConfigureLater false
-                      -aadUsername $(aadUsername)
-                      -tenantId $(tenant-id-secret)
-                      -aadUserObjectId $(aadUserObjectId)
-                    deploymentMode: 'Incremental'
-                    deploymentOutputs: 'ArmOutputs'
+                  azureSubscription: $(serviceConnection)
+                  scriptType: bash
+                  scriptLocation: inlineScript
+                  inlineScript: |
+                    az deployment group create \
+                    --name ClintGAzReal \
+                    --resource-group bicep-cga-dev-uks-rg-01 \
+                    --template-file $(Pipeline.Workspace)/bicepresources/infrastructure/maindeploy.json \
+                    --parameters serverPassword=$(SqlPassword) \
+                           deploymentEnvironment=dev \
+                           gitConfigureLater=false \
+                           aadUsername=$(aadUsername) \
+                           tenantId=$(tenant-id-secret) \
+                           aadUserObjectId=$(aadUserObjectId)
 
   - stage: 'test'
     displayName: 'Test infra deploy'
