@@ -70,20 +70,20 @@ stages:
                     source: 'current'
                     path: '$(Pipeline.Workspace)'
                 
-                # - task: AzureCLI@2
-                #   displayName: Bicep deploy Scope of SubscriptionId
-                #   inputs:
-                #     azureSubscription: $(serviceConnection)
-                #     scriptType: bash
-                #     scriptLocation: inlineScript
-                #     inlineScript: |
-                #       az --version
-                #       az upgrade
-                #       az deployment sub create  \
-                #         --name ClintGAzReal \
-                #         --location $(location) \
-                #         --template-file $(Pipeline.Workspace)/bicepresources/infrastructure/resourcegroupcreation.json \
-                #         --parameters environment="dev" azlocation="uksouth" nameofrg="bicep-cga-dev-uks-rg-01"
+                - task: AzureCLI@2
+                  displayName: Bicep deploy Scope of SubscriptionId
+                  inputs:
+                    azureSubscription: $(serviceConnection)
+                    scriptType: bash
+                    scriptLocation: inlineScript
+                    inlineScript: |
+                      az --version
+                      az upgrade
+                      az deployment sub create  \
+                        --name ClintGAzReal \
+                        --location $(location) \
+                        --template-file $(Pipeline.Workspace)/bicepresources/infrastructure/resourcegroupcreation.json \
+                        --parameters environment="dev" azlocation="uksouth" nameofrg="bicep-cga-dev-uks-rg-01"
               
 
                 - task: AzureCLI@2
@@ -121,20 +121,20 @@ stages:
                     source: 'current'
                     path: '$(Pipeline.Workspace)'
 
-                # - task: AzureCLI@2
-                #   displayName: Bicep deploy Scope of SubscriptionId
-                #   inputs:
-                #     azureSubscription: $(serviceConnection)
-                #     scriptType: bash
-                #     scriptLocation: inlineScript
-                #     inlineScript: |
-                #       az --version
-                #       az upgrade
-                #       az deployment sub create  \
-                #         --name ClintGAzReal \
-                #         --location $(location) \
-                #         --template-file $(Pipeline.Workspace)/bicepresources/infrastructure/resourcegroupcreation.json \
-                #         --parameters environment="test" azlocation="uksouth" nameofrg="bicep-cga-test-uks-rg-01"
+                - task: AzureCLI@2
+                  displayName: Bicep deploy Scope of SubscriptionId
+                  inputs:
+                    azureSubscription: $(serviceConnection)
+                    scriptType: bash
+                    scriptLocation: inlineScript
+                    inlineScript: |
+                      az --version
+                      az upgrade
+                      az deployment sub create  \
+                        --name ClintGAzReal \
+                        --location $(location) \
+                        --template-file $(Pipeline.Workspace)/bicepresources/infrastructure/resourcegroupcreation.json \
+                        --parameters environment="test" azlocation="uksouth" nameofrg="bicep-cga-test-uks-rg-01"
 
                 - task: AzureCLI@2
                   displayName: Bicep deploy Scope of Resource Group
