@@ -75,7 +75,7 @@ resource kv 'Microsoft.KeyVault/vaults@2023-07-01' existing = {
 module m_SqlServer 'modules/sql-server-and-db.bicep' = {
   name: 'SqlServer'
   params: {
-    sqlserverpassword: serverPassword //kv.getSecret('SqlPassword')
+    sqlserverpassword: 'newPasswordhere22323' //serverPassword //kv.getSecret('SqlPassword')
     env: deploymentEnvironment
     location: resourcelocation
     SQLServerName: 'sql-bicep-${deploymentEnvironment}-cgr2'

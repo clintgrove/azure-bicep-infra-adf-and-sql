@@ -56,7 +56,7 @@ stages:
     displayName: 'Development infra deploy'
     dependsOn:  publish_bicep_to_agent
     variables:
-      - group: Dev-vars
+    - group: Dev-vars
 
     jobs: 
       - deployment: DeployToDevelopment
@@ -85,6 +85,10 @@ stages:
                 #         --template-file $(Pipeline.Workspace)/bicepresources/infrastructure/resourcegroupcreation.json \
                 #         --parameters environment="dev" azlocation="uksouth" nameofrg="bicep-cga-dev-uks-rg-01"
               
+                - script: echo $(aadUsername)
+                  displayName: 'Get aadUserName' 
+                - script: echo $(SqlPassword)
+                  displayName: 'Get sqlpss'  
                 - task: AzureResourceManagerTemplateDeployment@3
                   displayName: Creating AZ Resource Infrastructure by IaC
                   inputs:
@@ -96,7 +100,7 @@ stages:
                     location: '$(location)'
                     templateLocation: 'Linked artifact'
                     csmFile: '$(Pipeline.Workspace)/bicepresources/infrastructure/maindeploy.json'
-                    overrideParameters: '-deploymentEnvironment dev -gitConfigureLater false'
+                    overrideParameters: -deploymentEnvironment dev -gitConfigureLater false
                     deploymentMode: 'Incremental'
                     deploymentOutputs: 'ArmOutputs'
 
