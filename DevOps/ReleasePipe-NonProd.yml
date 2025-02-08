@@ -107,7 +107,7 @@ stages:
     displayName: 'Test infra deploy'
     dependsOn: development
     variables:
-      -group: Test-vars
+    - group: Test-vars
 
     jobs: 
       - deployment: DeployToTest
@@ -120,7 +120,7 @@ stages:
                   inputs:
                     source: 'current'
                     path: '$(Pipeline.Workspace)'
-                    
+
                 # - task: AzureCLI@2
                 #   displayName: Bicep deploy Scope of SubscriptionId
                 #   inputs:
