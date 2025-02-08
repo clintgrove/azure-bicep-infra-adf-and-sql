@@ -143,9 +143,12 @@ stages:
                     location: '$(location)'
                     templateLocation: 'Linked artifact'
                     csmFile: '$(Pipeline.Workspace)/bicepresources/infrastructure/maindeploy.json'
-                    overrideParameters: '-deploymentEnvironment test -gitConfigureLater true -serverPassword $(SqlPassword)'
-                    deploymentMode: 'Incremental'
+                    overrideParameters: |
+                      -serverPassword $(SqlPassword)
+                      -deploymentEnvironment dev
+                      -gitConfigureLater false
                     deploymentOutputs: 'ArmOutputs'
+                    deploymentMode: 'Incremental'
 
   - stage: 'build_adf_services'
     displayName: Build ADF artifact
