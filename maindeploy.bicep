@@ -3,10 +3,6 @@
 @description('ADX Database Name')
 param resourcelocation string = resourceGroup().location
 
-@description('password for server')
-@secure()
-param serverPassword string
-
 @description('Which deployment environment DEV, TEST PROD etc')
 param deploymentEnvironment string = 'dev'
 
@@ -19,9 +15,12 @@ param gitRepositoryName string = 'azure-bicep-infra-adf-and-sql'
 param gitCollaborationBranch string = 'main'
 param gitRootFolder string = '/adf-dev'
 param gitProjectName string = ''
-param p_aadUsername string
-param p_aadUserObjectId string
-param p_tenantId string
+@secure()
+param serverPassword string
+@secure()
+param aadUsername string
+@secure()
+param aadUserObjectId string
 
 // Deploy Factory (note that if you deploy this data factory infrastructure with global parameters and you don't have the same global parameters in your /adf-dev git folder (see the folder structure)
 // then when you do a build, which builds from the dev factory, then the global parameter, in this case infraGParam will disappear as it doesn't exist in your dev factory git folder /adf-dev )
@@ -72,18 +71,18 @@ resource m_DataFactoryPipeline 'Microsoft.DataFactory/factories/pipelines@2018-0
   }
 }
 
-
 module m_SqlServer 'modules/sql-server-and-db.bicep' = {
   name: 'SqlServer'
   params: {
-    sqlserverpassword: serverPassword
+    sqlserverpassword: serverPassword 
     env: deploymentEnvironment
     location: resourcelocation
     SQLServerName: 'sql-bicep-${deploymentEnvironment}-cgr2'
-    pin_aadUsername: p_aadUsername
-    pin_TenantId: p_tenantId
+    pin_aadUsername: aadUsername
+    pin_aadUserObjectId: aadUserObjectId
   }
 }
+
 
 module m_StorageAccounts 'modules/storageaccount.bicep' = {
   name: 'StorageAccounts'
