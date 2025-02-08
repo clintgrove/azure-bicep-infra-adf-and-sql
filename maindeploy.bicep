@@ -17,7 +17,9 @@ param gitRootFolder string = '/adf-dev'
 param gitProjectName string = ''
 @secure()
 param serverPassword string
+@secure()
 param aadUsername string
+@secure()
 param aadUserObjectId string
 
 // Deploy Factory (note that if you deploy this data factory infrastructure with global parameters and you don't have the same global parameters in your /adf-dev git folder (see the folder structure)

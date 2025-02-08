@@ -70,20 +70,20 @@ stages:
                     source: 'current'
                     path: '$(Pipeline.Workspace)'
                 
-                - task: AzureCLI@2
-                  displayName: Bicep deploy Scope of SubscriptionId
-                  inputs:
-                    azureSubscription: $(serviceConnection)
-                    scriptType: bash
-                    scriptLocation: inlineScript
-                    inlineScript: |
-                      az --version
-                      az upgrade
-                      az deployment sub create  \
-                        --name ClintGAzReal \
-                        --location $(location) \
-                        --template-file $(Pipeline.Workspace)/bicepresources/infrastructure/resourcegroupcreation.json \
-                        --parameters environment="dev" azlocation="uksouth" nameofrg="bicep-cga-dev-uks-rg-01"
+                # - task: AzureCLI@2
+                #   displayName: Bicep deploy Scope of SubscriptionId
+                #   inputs:
+                #     azureSubscription: $(serviceConnection)
+                #     scriptType: bash
+                #     scriptLocation: inlineScript
+                #     inlineScript: |
+                #       az --version
+                #       az upgrade
+                #       az deployment sub create  \
+                #         --name ClintGAzReal \
+                #         --location $(location) \
+                #         --template-file $(Pipeline.Workspace)/bicepresources/infrastructure/resourcegroupcreation.json \
+                #         --parameters environment="dev" azlocation="uksouth" nameofrg="bicep-cga-dev-uks-rg-01"
               
 
                 - task: AzureCLI@2
@@ -98,7 +98,7 @@ stages:
                       --resource-group bicep-cga-dev-uks-rg-01 \
                       --template-file $(Pipeline.Workspace)/bicepresources/infrastructure/maindeploy.json \
                       --parameters serverPassword=$(SqlPassword) \
-                            deploymentEnvironment=test \
+                            deploymentEnvironment=dev \
                             gitConfigureLater=false \
                             aadUsername=$(aadUsername) \
                             aadUserObjectId=$(aadUserObjectId)
@@ -120,20 +120,21 @@ stages:
                   inputs:
                     source: 'current'
                     path: '$(Pipeline.Workspace)'
-                - task: AzureCLI@2
-                  displayName: Bicep deploy Scope of SubscriptionId
-                  inputs:
-                    azureSubscription: $(serviceConnection)
-                    scriptType: bash
-                    scriptLocation: inlineScript
-                    inlineScript: |
-                      az --version
-                      az upgrade
-                      az deployment sub create  \
-                        --name ClintGAzReal \
-                        --location $(location) \
-                        --template-file $(Pipeline.Workspace)/bicepresources/infrastructure/resourcegroupcreation.json \
-                        --parameters environment="test" azlocation="uksouth" nameofrg="bicep-cga-test-uks-rg-01"
+                    
+                # - task: AzureCLI@2
+                #   displayName: Bicep deploy Scope of SubscriptionId
+                #   inputs:
+                #     azureSubscription: $(serviceConnection)
+                #     scriptType: bash
+                #     scriptLocation: inlineScript
+                #     inlineScript: |
+                #       az --version
+                #       az upgrade
+                #       az deployment sub create  \
+                #         --name ClintGAzReal \
+                #         --location $(location) \
+                #         --template-file $(Pipeline.Workspace)/bicepresources/infrastructure/resourcegroupcreation.json \
+                #         --parameters environment="test" azlocation="uksouth" nameofrg="bicep-cga-test-uks-rg-01"
 
                 - task: AzureCLI@2
                   displayName: Bicep deploy Scope of Resource Group
@@ -147,7 +148,7 @@ stages:
                       --resource-group bicep-cga-test-uks-rg-01 \
                       --template-file $(Pipeline.Workspace)/bicepresources/infrastructure/maindeploy.json \
                       --parameters serverPassword=$(SqlPassword) \
-                            deploymentEnvironment=dev \
+                            deploymentEnvironment=test \
                             gitConfigureLater=false \
                             aadUsername=$(aadUsername) \
                             aadUserObjectId=$(aadUserObjectId)              
