@@ -70,20 +70,20 @@ stages:
                     source: 'current'
                     path: '$(Pipeline.Workspace)'
                 
-                # - task: AzureCLI@2
-                #   displayName: Bicep deploy Scope of SubscriptionId
-                #   inputs:
-                #     azureSubscription: $(serviceConnection)
-                #     scriptType: bash
-                #     scriptLocation: inlineScript
-                #     inlineScript: |
-                #       az --version
-                #       az upgrade
-                #       az deployment sub create  \
-                #         --name ClintGAzReal \
-                #         --location $(location) \
-                #         --template-file $(Pipeline.Workspace)/bicepresources/infrastructure/resourcegroupcreation.json \
-                #         --parameters environment="dev" azlocation="uksouth" nameofrg="bicep-cga-dev-uks-rg-01"
+                - task: AzureCLI@2
+                  displayName: Bicep deploy Scope of SubscriptionId
+                  inputs:
+                    azureSubscription: $(serviceConnection)
+                    scriptType: bash
+                    scriptLocation: inlineScript
+                    inlineScript: |
+                      az --version
+                      az upgrade
+                      az deployment sub create  \
+                        --name ClintGAzReal \
+                        --location $(location) \
+                        --template-file $(Pipeline.Workspace)/bicepresources/infrastructure/resourcegroupcreation.json \
+                        --parameters environment="dev" azlocation="uksouth" nameofrg="bicep-cga-dev-uks-rg-01"
               
                 - script: echo $(aadUsername)
                   displayName: 'Get aadUserName' 
@@ -137,22 +137,24 @@ stages:
                         --location $(location) \
                         --template-file $(Pipeline.Workspace)/bicepresources/infrastructure/resourcegroupcreation.json \
                         --parameters environment="test" azlocation="uksouth" nameofrg="bicep-cga-test-uks-rg-01"
-              
-                - task: AzureResourceManagerTemplateDeployment@3
-                  displayName: Creating AZ Resource Infrastructure by IaC
-                  inputs:
-                    deploymentScope: 'Resource Group'
-                    azureResourceManagerConnection: '$(serviceConnection)'
-                    subscriptionId: '$(subscriptionId)'
-                    action: 'Create Or Update Resource Group'
-                    resourceGroupName: 'bicep-cga-test-uks-rg-01'
-                    location: '$(location)'
-                    templateLocation: 'Linked artifact'
-                    csmFile: '$(Pipeline.Workspace)/bicepresources/infrastructure/maindeploy.json'
-                    overrideParameters: -serverPassword $(SqlPassword) -deploymentEnvironment dev -gitConfigureLater false
-                    deploymentOutputs: 'ArmOutputs'
-                    deploymentMode: 'Incremental'
 
+                - task: AzureCLI@2
+                  displayName: Bicep deploy Scope of Resource Group
+                  inputs:
+                    azureSubscription: $(serviceConnection)
+                    scriptType: bash
+                    scriptLocation: inlineScript
+                    inlineScript: |
+                      az deployment group create \
+                      --name ClintGAzReal \
+                      --resource-group bicep-cga-test-uks-rg-01 \
+                      --template-file $(Pipeline.Workspace)/bicepresources/infrastructure/maindeploy.json \
+                      --parameters serverPassword=$(SqlPassword) \
+                            deploymentEnvironment=dev \
+                            gitConfigureLater=false \
+                            aadUsername=$(aadUsername) \
+                            aadUserObjectId=$(aadUserObjectId)              
+ 
   - stage: 'build_adf_services'
     displayName: Build ADF artifact
     jobs:  
